@@ -1,0 +1,15 @@
+import 'package:material_ui/material_ui.dart';
+
+class OnboardingItem {
+  const OnboardingItem({
+    required this.title,
+    required this.description,
+    required this.icon,
+    required this.accentColor,
+  });
+
+  final String title;
+  final String description;
+  final IconData icon;
+  final Color accentColor;
+}

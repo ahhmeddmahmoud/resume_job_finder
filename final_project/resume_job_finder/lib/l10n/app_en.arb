@@ -1,0 +1,36 @@
+{
+  "@@locale": "en",
+  "appName": "Resume & Job Finder",
+  "splashTitleLine1": "Automated Resume Matching",
+  "splashTitleLine2": "& Job Finder App",
+  "splashSubtitle": "Your smart assistant to analyze your CV & find jobs",
+  "tabHome": "Home",
+  "tabJobs": "Jobs",
+  "tabSaved": "Saved",
+  "tabApplications": "Applications",
+  "tabProfile": "Profile",
+  "matchPercent": "{percent}% Match",
+  "@matchPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "skillsCount": "{count, plural, =0{No skills} =1{1 skill} other{{count} skills}}",
+  "@skillsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsTitle": "Settings",
+  "appearanceSection": "Appearance",
+  "displayMode": "Display Mode",
+  "lightMode": "Light",
+  "darkMode": "Dark",
+  "languageSection": "Language",
+  "appLanguage": "App Language",
+  "signOut": "Sign Out"
+}
