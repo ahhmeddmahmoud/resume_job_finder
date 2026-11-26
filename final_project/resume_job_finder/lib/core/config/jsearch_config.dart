@@ -1,7 +1,7 @@
-/// JSearch v5 (RapidAPI) configuration read via `--dart-define`.
+import 'jsearch_secrets.dart';
 const String jsearchApiKey = String.fromEnvironment(
   'JSEARCH_API_KEY',
-  defaultValue: '',
+  defaultValue: kJsearchApiKey,
 );
 
 const String jsearchHost = String.fromEnvironment(

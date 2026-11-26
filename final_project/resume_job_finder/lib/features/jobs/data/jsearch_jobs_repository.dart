@@ -63,7 +63,7 @@ class JSearchJobsRepository {
       final host = jsearchHost.trim().isEmpty
           ? 'jsearch.p.rapidapi.com'
           : jsearchHost.trim();
-      final uri = Uri.https(host, '/search', {
+      final uri = Uri.https(host, '/search-v2', {
         'query': query,
         'country': 'eg',
         'num_pages': '1',
