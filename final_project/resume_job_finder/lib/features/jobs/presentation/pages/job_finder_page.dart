@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:resume_job_finder/features/jobs/presentation/widgets/jobs_loading_skeleton.dart';
 
 import '../../../../core/localization/app_strings.dart';
 import '../../../../core/routing/app_routes.dart';
@@ -77,7 +78,7 @@ class _JobFinderPageState extends State<JobFinderPage> {
         child: BlocBuilder<ResumeMatchingCubit, ResumeMatchingState>(
           builder: (context, cvState) {
             if (cvState.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const JobsLoadingSkeleton();
             }
 
             final allJobs = cvState.analysis?.recommendedJobs ?? const [];
