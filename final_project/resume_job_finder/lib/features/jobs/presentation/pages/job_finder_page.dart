@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:resume_job_finder/features/jobs/presentation/widgets/jobs_loading_skeleton.dart';
 
 import '../../../../core/localization/app_strings.dart';
 import '../../../../core/routing/app_routes.dart';
@@ -77,7 +78,7 @@ class _JobFinderPageState extends State<JobFinderPage> {
         child: BlocBuilder<ResumeMatchingCubit, ResumeMatchingState>(
           builder: (context, cvState) {
             if (cvState.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const JobsLoadingSkeleton();
             }
 
             final allJobs = cvState.analysis?.recommendedJobs ?? const [];
@@ -298,12 +299,17 @@ class _JobCard extends StatelessWidget {
     final wt = _localizeWorkType(strings, job.workType);
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 14),
+      elevation: 2,
+      shadowColor: AppColors.primary.withValues(alpha: 0.12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
