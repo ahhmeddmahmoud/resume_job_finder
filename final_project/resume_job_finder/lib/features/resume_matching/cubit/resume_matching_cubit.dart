@@ -138,6 +138,41 @@ class ResumeMatchingCubit extends Cubit<ResumeMatchingState> {
     }
   }
 
+  /// Re-fetches live jobs for the current analysis (pull-to-refresh).
+  Future<void> refreshJobs() async {
+    final current = state.analysis;
+    if (current == null) return;
+    try {
+      final preferences = await _repository.getUserCareerPreferences();
+      if (isClosed) return;
+      final jobs = await _jobsRepository.fetchJobs(
+        analysis: current,
+        preferences: preferences,
+        fallbackJobs: current.recommendedJobs,
+      );
+      if (isClosed) return;
+      final updated = ResumeAnalysisModel(
+        fileName: current.fileName,
+        bestJobTitle: current.bestJobTitle,
+        experienceYears: current.experienceYears,
+        matchPercentage: current.matchPercentage,
+        summary: current.summary,
+        skills: current.skills,
+        matchedSkills: current.matchedSkills,
+        strengths: current.strengths,
+        missingSkills: current.missingSkills,
+        recommendedJobs: jobs,
+        isLocalFallback: current.isLocalFallback,
+        usedModel: current.usedModel,
+        analyzedAt: current.analyzedAt,
+      );
+      emit(state.copyWith(analysis: updated));
+      await _repository.saveAnalysisResult(updated);
+    } catch (_) {
+      // Keep the old jobs if the refresh fails.
+    }
+  }
+
   /// Runs the CV analysis, live job search, and persistence pipeline.
   Future<void> runAnalysisPipeline() async {
     final picked = _lastPickedPdf;

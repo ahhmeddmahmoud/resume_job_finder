@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:resume_job_finder/features/jobs/presentation/widgets/jobs_loading_skeleton.dart';
 
 import '../../../../core/localization/app_strings.dart';
 import '../../../../core/routing/app_routes.dart';
@@ -78,7 +77,7 @@ class _JobFinderPageState extends State<JobFinderPage> {
         child: BlocBuilder<ResumeMatchingCubit, ResumeMatchingState>(
           builder: (context, cvState) {
             if (cvState.isLoading) {
-              return const JobsLoadingSkeleton();
+              return const Center(child: CircularProgressIndicator());
             }
 
             final allJobs = cvState.analysis?.recommendedJobs ?? const [];
@@ -222,29 +221,35 @@ class _JobFinderPageState extends State<JobFinderPage> {
                                 style: theme.textTheme.bodyMedium,
                               ),
                             )
-                          : ListView.builder(
-                              padding: const EdgeInsets.fromLTRB(
-                                20,
-                                4,
-                                20,
-                                112,
+                          : RefreshIndicator(
+                              onRefresh: () => context
+                                  .read<ResumeMatchingCubit>()
+                                  .refreshJobs(),
+                              child: ListView.builder(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                padding: const EdgeInsets.fromLTRB(
+                                  20,
+                                  4,
+                                  20,
+                                  112,
+                                ),
+                                itemCount: filteredJobs.length,
+                                itemBuilder: (context, index) {
+                                  final job = filteredJobs[index];
+                                  final isSaved = savedState.isSaved(job);
+                                  return _JobCard(
+                                    job: job,
+                                    isSaved: isSaved,
+                                    onBookmarkTap: () => context
+                                        .read<SavedJobsCubit>()
+                                        .toggleSave(job),
+                                    onTap: () => context.push(
+                                      AppRoutes.jobDetails,
+                                      extra: job,
+                                    ),
+                                  );
+                                },
                               ),
-                              itemCount: filteredJobs.length,
-                              itemBuilder: (context, index) {
-                                final job = filteredJobs[index];
-                                final isSaved = savedState.isSaved(job);
-                                return _JobCard(
-                                  job: job,
-                                  isSaved: isSaved,
-                                  onBookmarkTap: () => context
-                                      .read<SavedJobsCubit>()
-                                      .toggleSave(job),
-                                  onTap: () => context.push(
-                                    AppRoutes.jobDetails,
-                                    extra: job,
-                                  ),
-                                );
-                              },
                             ),
                     ),
                   ],
