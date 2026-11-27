@@ -33,12 +33,7 @@ class JSearchJobsRepository {
     final skills = analysis.skills.take(3).toList();
     final cvTerm = role.isNotEmpty ? role : skills.join(' ');
     final preferredTrack = _clean(preferences?.track);
-    final roleOrSkills = cvTerm.isEmpty
-        ? preferredTrack
-        : (preferredTrack.isNotEmpty &&
-                !cvTerm.toLowerCase().contains(preferredTrack.toLowerCase())
-            ? '$cvTerm $preferredTrack'
-            : cvTerm);
+    final roleOrSkills = cvTerm.isEmpty ? preferredTrack : cvTerm;
     final query = roleOrSkills.isEmpty
         ? 'Software Developer in Egypt'
         : '$roleOrSkills in $location';
