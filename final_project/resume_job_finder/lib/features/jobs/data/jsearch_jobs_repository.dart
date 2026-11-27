@@ -168,12 +168,18 @@ class JSearchJobsRepository {
     final preferenceMatches = preferenceTerms
         .where((term) => _containsSkill(searchable, term))
         .toList();
-    final denominator = skills.length + preferenceTerms.length;
-    final score = denominator == 0
-        ? 0
-        : ((matched.length + preferenceMatches.length) * 100 / denominator)
-            .round()
-            .clamp(0, 100);
+    final roleWords = targetRole
+        .toLowerCase()
+        .split(RegExp(r'\s+'))
+        .where((word) => word.length > 2)
+        .toList();
+    final titleLower = title.toLowerCase();
+    final roleScore =
+        roleWords.any((word) => titleLower.contains(word)) ? 40 : 0;
+    final skillScore =
+        skills.isEmpty ? 0 : (matched.length * 60 / skills.length).round();
+    final preferenceBonus = preferenceMatches.length * 5;
+    final score = (roleScore + skillScore + preferenceBonus).clamp(0, 100);
     final allMatched = {...matched, ...preferenceMatches}.toList();
     final missing = skills.where((skill) => !matched.contains(skill)).toList();
     final rawId = value(raw['job_id']) ?? value(raw['job_uid']);
